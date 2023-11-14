@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log-in</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+        *{
+            margin: 0%;
+            padding: 0%;
+            font-family: 'Montserrat', sans-serif;
+        }
+        #container{
+            padding: 50px 20px;
+        }
+        .page{
+            max-width: 300px;
+            padding: 50px ;
+            margin: 50px auto;
+            background-color: rgba(0, 0, 0,0.8);
+            border-radius: 15px;
+        }
+        .page #head{
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: x-large;
+            color: #fff;
+        }
+        .page .inputbox{
+            position: relative;
+        }
+        .page .inputbox input{
+            color:#fff;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 30px;
+            border: none;
+            border-bottom: 1px solid #fff;
+            background: transparent;
+            outline: none;
+        }
+        .page .inputbox label{
+            position: absolute;
+            top:0;
+            left: 0;
+            padding: 10px 0;
+            transition: 0.5s;
+            color: #fff;
+
+        }
+
+        .page .inputbox input:focus ~ label,
+        .page .inputbox input:valid ~ label{
+            top:-20px ;
+            left:0 ;
+            color:#03a9f4 ;
+            font-size:13px ;
+        }
+        .page .login{
+            text-align: center;
+        }
+        .page .login input[type="submit"]{
+            width: 100%;
+            border: none;
+            outline: none;
+            padding: 10px;
+            color: #fff;
+            font-size: 16px;
+            background-color: #03a9f4;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .page .signup{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .page .signup p{
+            color: #fff;
+        }
+        .page .signup a{
+            color: #03a9f4;
+            text-decoration: none;
+        }
+        .page .signup a:hover{
+            color: #fff;
+            text-decoration: underline;
+        }
+        .page .admin{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .page .admin p{
+            color: #fff;
+        }
+        .page .admin a{
+            color: #03a9f4;
+            text-decoration: none;
+        }
+        .page .admin a:hover{
+            color: #fff;
+            text-decoration: underline;
+        }
+        </style>
+
+
+</head>
+<body>
+    <div id="container">
+    <div class="page">
+        <p id="head">Admin Portal</p>
+        <% if (error) { %>
+            <p style="color:red; padding-bottom: 20px;"><%= error %></p>
+        <% } %>
+        <form id="login" action="/adminlogin" method="post">
+            <div class="inputbox">
+                <input type="text" id="username" name="username" required/>
+                <label>Username/E-mail</label>
+            </div>
+            <div class="inputbox">
+                <input type="password" id="password" name="password" required/>
+                <label>Password</label>
+            </div>
+            <div class="login">
+                <input type="submit" value="Log in"/>
+            </div>
+            <div class="signup">
+                <p>Create Account?</p>
+                <a href="/signup" class="signup-link">Sign up</a>
+            </div>
+            <div class="admin">
+                <p>User?</p>
+                <a href="/login" class="signup-link">Log in</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

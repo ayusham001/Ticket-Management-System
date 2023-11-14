@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Management System</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #task-button {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #All-Ticket-btn,
+        #Open-Ticket-btn {
+            background-color: #6d7074;
+            color: #ffffff;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #All-Ticket-btn:hover,
+        #Open-Ticket-btn:hover {
+            background-color: #555;
+        }
+
+        #Ticketslist {
+            width: 100%;
+            border-spacing:0 10px;
+        }
+
+        .head {
+            text-align: center;
+            color: #ffffff;
+            border-radius: 15px;
+        }
+        
+        .head td {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 5px 0px;
+            word-break: break-all;
+            margin-bottom: 10px;
+        }
+
+        .head td:first-child {
+            border-top-left-radius: 5px;
+        }
+
+        .head td:last-child {
+            border-top-right-radius: 5px;
+        }
+
+        .ticket-list {
+            text-align: center;
+            color: #ffffff;
+            border-radius: 15px;
+        }
+        
+        .ticket-list td {
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 10px 10px;
+            word-break: break-all;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        .ticket-list td:first-child {
+            border-top-left-radius: 5px;
+        }
+
+        .ticket-list td:last-child {
+            border-top-right-radius: 5px;
+        }
+
+        @media only screen and (max-width: 768px) {
+            /* Adjust font size for smaller screens */
+            .main {
+                display: flex;
+                flex-direction: column;
+            }
+
+            /* Reduce button font size for smaller screens */
+            #All-Ticket-btn,
+            #Open-Ticket-btn {
+                font-size: 14px;
+            }
+
+            /* Center align table content */
+            .list-content {
+                text-align: center;
+            }
+
+            /* Apply border to table rows for separation */
+            .head tr,
+            .ticket-list tr {
+                border: 1px solid rgba(0, 0, 0, 0.7);
+                border-radius: 5px;
+                margin-bottom: 10px;
+            }
+
+            /* Adjust padding and font size for better readability on small screens */
+            .head td,
+            .ticket-list td {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <nav class="navbar">
+            <%- include('header') %>
+        </nav>
+        <div class="content">
+            <div class="sidebar">
+                <%- include('dashboard') %>
+            </div>
+            <div class="main">
+                <h1>Ticket List</h1>
+                <div id="task-button">
+                    <button id="All-Ticket-btn">All Tickets</button>
+                    <button id="Open-Ticket-btn">Open Tickets</button>
+                </div>
+                <div id="loading" style="display: none; color: red;">Loading...</div>
+                <div id="chat-room"></div>
+
+                <div class="list-content">
+                    <table id="Ticketslist">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/script.js"></script>
+    
+    <script src="/script.js"></script>
+</body>
+
+</html>

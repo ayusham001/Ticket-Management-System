@@ -1,0 +1,42 @@
+<style>
+     .dashboard-container {
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 10px 1px;
+        border-radius: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+    .dashboard-container h2{
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .dashboard {
+        display: flex;
+        flex-direction: column;
+    }
+    .dashboard a {
+        padding: 10px;
+        margin: 10px;
+        background-color: black;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        text-align: center;
+        transition: transform 0.2s;
+    }
+    .dashboard a:hover {
+        transform: scale(1.05);
+    }
+</style>
+
+<div class="dashboard-container">
+    <h2>Dashboard</h2>
+    <div class="dashboard">
+        <a href="/" data-content="welcome">Home</a>
+        <a href="/ticket-list" data-content="ticket-list">Ticket List</a>
+        <a href="/create-ticket" data-content="create-ticket">Create Ticket</a>
+        <a href="/edit-profile" data-content="edit-profile">Edit Profile</a>
+        <a href="/logout" data-content="logout">Log-out</a>
+    </div>
+</div>

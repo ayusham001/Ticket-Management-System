@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Management System</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #task-button {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #All-Admin,
+        #Open-Admin {
+            background-color: #6d7074;
+            color: #ffffff;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #All-Ticket-btn:hover,
+        #Open-Ticket-btn:hover {
+            background-color: #555;
+        }
+
+        #AdminTickets {
+            width: 100%;
+            border-spacing: 0 10px;
+        }
+
+        .head {
+            text-align: center;
+            color: #ffffff;
+            border-radius: 15px;
+        }
+
+        .head td {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 5px 0px;
+            word-break: break-all;
+            margin-bottom: 10px;
+        }
+
+        .head td:first-child {
+            border-top-left-radius: 5px;
+        }
+
+        .head td:last-child {
+            border-top-right-radius: 5px;
+        }
+
+        .ticket-list {
+            text-align: center;
+            color: #ffffff;
+            border-radius: 15px;
+        }
+
+        .ticket-list td {
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 10px 10px;
+            word-break: break-all;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        .ticket-list td:first-child {
+            border-top-left-radius: 5px;
+        }
+
+        .ticket-list td:last-child {
+            border-top-right-radius: 5px;
+        }
+
+        @media only screen and (max-width: 768px) {
+
+            /* Adjust font size for smaller screens */
+            .main {
+                display: flex;
+                flex-direction: column;
+            }
+
+            /* Reduce button font size for smaller screens */
+            #All-Ticket-btn,
+            #Open-Ticket-btn {
+                font-size: 14px;
+            }
+
+            /* Center align table content */
+            .list-content {
+                text-align: center;
+            }
+
+            /* Apply border to table rows for separation */
+            .head tr,
+            .ticket-list tr {
+                border: 1px solid rgba(0, 0, 0, 0.7);
+                border-radius: 5px;
+                margin-bottom: 10px;
+            }
+
+            /* Adjust padding and font size for better readability on small screens */
+            .head td,
+            .ticket-list td {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <nav class="navbar">
+            <%- include('header') %>
+        </nav>
+        <div class="content">
+            <div class="sidebar">
+                <%- include('adminDashboard') %>
+            </div>
+            <div class="main">
+                <h1>Ticket List</h1>
+                <div id="task-button">
+                    <button id="All-Admin">All Tickets</button>
+                    <button id="Open-Admin">Open Tickets</button>
+                </div>
+                <div id="adminloading" style="display: none; color: red;">Loading...</div>
+                <div id="chat-room"></div>
+                <div class="list-content">
+                    <table id="AdminTickets">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        const socket = io();
+        const adminloading = document.getElementById("adminloading");
+        const allAdminButton = document.getElementById("All-Admin");
+        const openAdminButton = document.getElementById("Open-Admin");
+        function openChatRoom(ticket) {
+            // You can customize this function to open a chat room UI and populate it with the ticket details
+            // For example, you could create a new section in your HTML for the chat room and populate it with the ticket's information.
+            const chatRoom = document.getElementById("chat-room");
+            chatRoom.innerHTML = `
+                <!-- ... existing code ... -->
+                <div id="chat-messages"></div>
+                <form id="chat-form">
+                    <input id="message-input" autocomplete="off" />
+                    <button>Send</button>
+                </form>
+            `;
+            const chatForm = document.getElementById('chat-form');
+            const messageInput = document.getElementById('message-input');
+            const chatMessages = document.getElementById('chat-messages');
+
+            chatForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const message = messageInput.value;
+                socket.emit('chat message', message);
+                messageInput.value = '';
+            });
+
+            // Receive and display chat messages
+            socket.on('chat message', (message) => {
+                const messageElement = document.createElement('p');
+                messageElement.textContent = message;
+                chatMessages.appendChild(messageElement);
+            });
+        }
+
+
+        openAdminButton.addEventListener("click", () => {
+            adminloading.style.display = "block";
+            fetch("/admin_open_tickets")
+                .then((response) => {
+                    adminloading.style.display = "none";
+                    if (response.status === 200) {
+                        return response.json();
+                    } else {
+                        alert("something weird happened");
+                    }
+                })
+                .then((data) => {
+                    const ticketListContainer = document.getElementById("AdminTickets");
+                    ticketListContainer.innerHTML = '';
+                    if (data.length === 0) {
+                        const noDataMessage = document.createElement("p");
+                        noDataMessage.textContent = "No ticket data available.";
+                        ticketListContainer.appendChild(noDataMessage);
+                    } else {
+                        ticketListContainer.innerHTML = '<tr class="head"><td>ID</td><td>Status</td><td>Title</td><td>Product Id</td><td>Category</td><td>Date</td></tr>';
+                        data.forEach((ticket) => {
+                            const ticketItem = document.createElement("tr");
+                            ticketItem.className = "ticket-list";
+                            const statusSpan = document.createElement("span");
+                            if (ticket.status === 'open') {
+                                statusSpan.style.backgroundColor = 'green';
+                                statusSpan.style.padding = '5px';
+                            } else {
+                                statusSpan.style.backgroundColor = 'grey';
+                                statusSpan.style.padding = '5px';
+                            }
+                            statusSpan.textContent = ticket.status;
+
+                            ticketItem.innerHTML = `
+                        <td>${ticket._id}</td>
+                        <td>${statusSpan.outerHTML}</td>
+                        <td>${ticket.title}</td>
+                        <td>${ticket.productId}</td>
+                        <td>${ticket.category}</td>
+                        <td>${ticket.date}</td>
+                        <td><button class="chat-button" data-ticket='${JSON.stringify(ticket)}'>Chat</button></td>
+                  
+                        <!-- Add more ticket details here as needed -->
+                    `;
+
+                            ticketListContainer.appendChild(ticketItem);
+                        });
+                        const chatButtons = document.querySelectorAll(".chat-button");
+                        chatButtons.forEach(button => {
+                            button.addEventListener("click", () => {
+                                const ticketData = JSON.parse(button.getAttribute("data-ticket"));
+                                openChatRoom(ticketData);
+                                // window.location.href = `/chat/${ticketData._id}`;
+                            });
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error fetching ticket data:", error);
+                });
+        });
+
+
+
+        allAdminButton.addEventListener("click", () => {
+            adminloading.style.display = "block";
+            fetch("/admin_tickets")
+                .then((response) => {
+                    adminloading.style.display = "none";
+                    if (response.status === 200) {
+                        return response.json();
+                    } else {
+                        alert("something weird happened");
+                    }
+                })
+                .then((data) => {
+                    const ticketListContainer = document.getElementById("AdminTickets");
+                    ticketListContainer.innerHTML = '';
+                    if (data.length === 0) {
+                        const noDataMessage = document.createElement("p");
+                        noDataMessage.textContent = "No ticket data available.";
+                        ticketListContainer.appendChild(noDataMessage);
+                    } else {
+                        ticketListContainer.innerHTML = '<tr class="head"><td>ID</td><td>Status</td><td>Title</td><td>Product Id</td><td>Category</td><td>Date</td></tr>';
+                        data.forEach((ticket) => {
+                            const ticketItem = document.createElement("tr");
+                            ticketItem.className = "ticket-list";
+                            const statusSpan = document.createElement("span");
+                            if (ticket.status === 'open') {
+                                statusSpan.style.backgroundColor = 'green';
+                                statusSpan.style.padding = '5px';
+                            } else {
+                                statusSpan.style.backgroundColor = 'grey';
+                                statusSpan.style.padding = '5px';
+                            }
+                            statusSpan.textContent = ticket.status;
+
+                            ticketItem.innerHTML = `
+                        <td>${ticket._id}</td>
+                        <td>${statusSpan.outerHTML}</td>
+                        <td>${ticket.title}</td>
+                        <td>${ticket.productId}</td>
+                        <td>${ticket.category}</td>
+                        <td>${ticket.date}</td>
+                        <td><button class="chat-button" data-ticket='${JSON.stringify(ticket)}'>Chat</button></td>
+                  
+                        <!-- Add more ticket details here as needed -->
+                    `;
+
+                            ticketListContainer.appendChild(ticketItem);
+                        });
+                        const chatButtons = document.querySelectorAll(".chat-button");
+                        chatButtons.forEach(button => {
+                            button.addEventListener("click", () => {
+                                const ticketData = JSON.parse(button.getAttribute("data-ticket"));
+                                openChatRoom(ticketData);
+                                // window.location.href = `/chat/${ticketData._id}`;
+                            });
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error fetching ticket data:", error);
+                });
+        });
+    </script>
+</body>
+
+</html>

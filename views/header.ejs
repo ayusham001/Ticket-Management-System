@@ -1,0 +1,32 @@
+<style>
+    .navbar {
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: white;
+        display: flex;
+        align-items: center;
+    }
+
+    .container {
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+    }
+
+    .name {
+        padding: 0px 10px;
+    }
+
+    .navbar .pic {
+        padding: 10px 10px;
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+    }
+</style>
+<nav class="navbar">
+    <div class="container">
+        <p class="name">Welcome, <%= name %>!</p>
+        <img class='pic' src="<%= pic %>" />
+    </div>
+</nav>

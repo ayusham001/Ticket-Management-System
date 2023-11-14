@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign-up</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+        * {
+            margin: 0%;
+            padding: 0%;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        #container {
+            padding: 50px 20px;
+        }
+
+        .page {
+            max-width: 400px;
+            padding: 50px;
+            margin: 50px auto;
+            background-color: rgba(0, 0, 0,0.8);
+            border-radius: 15px;
+        }
+
+        .page h1 {
+            margin-bottom: 30px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .page .inputbox {
+            position: relative;
+        }
+
+        .page .inputbox input {
+            color: #fff;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 30px;
+            border: none;
+            border-bottom: 1px solid #fff;
+            background: transparent;
+            outline: none;
+        }
+
+        .page .inputbox label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 10px 0;
+            transition: 0.5s;
+            color: #fff;
+
+        }
+
+        .page input[type="submit"] {
+            width: 100%;
+            border: none;
+            outline: none;
+            padding: 10px;
+            color: #fff;
+            font-size: 16px;
+            background-color: #03a9f4;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .page .inputbox input:focus~label,
+        .page .inputbox input:valid~label {
+            top: -20px;
+            left: 0;
+            color: #03a9f4;
+            font-size: 13px;
+        }
+
+        .page .log {
+            margin-top: 20px;
+            color: #fff;
+        }
+
+        .page .log a:hover {
+            color: #fff;
+        }
+
+        .page .log a {
+            color: #03a9f4;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div class="page">
+            <h1>SIGN-UP</h1>
+            <% if (error) { %>
+                <p style="color:red; padding-bottom: 20px;"><%= error %></p>
+            <% } %>
+            <form action="/signup" method="post" id="signupForm" enctype="multipart/form-data">
+                <div class="inputbox">
+                    <input type="text" id="name" name="name" required />
+                    <label>Name</label>
+                </div>
+                <div class="inputbox">
+                    <input type="text" id="username" name="username" required />
+                    <label>Username</label>
+                </div>
+                <div class="inputbox">
+                    <input type="email" id="email" name="email" required />
+                    <label>E-Mail</label>
+                </div>
+                <div class="inputbox">
+                    <input type="password" id="password" name="password" required/>
+                    <label>Password</label>
+                </div>
+                <div class="inputbox">
+                    <input type="password" id="cpassword" name="confirm-password" required/>
+                    <label>Confirm Password</label>
+                </div>
+                <div style="color: #fff;padding-bottom: 20px;">
+                    <label for="pic">Profile Pic:</label>
+                    <input type="file" id="pic" name="pic" style="padding-top: 5px;" required>
+                </div>
+                <div class="button">
+                    <input type="submit" value="Sign-up" />
+                </div>
+                <div class="log">
+                    <p>Already have an account?</p>
+                    <a href="/login">Log-In</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

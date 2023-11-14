@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Management System</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+    
+        .action-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            background-color: rgba(255, 255, 255, 0.835);
+            color: #333333;
+            padding: 20px 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            margin: 50px auto;
+        }
+    
+        .action-container h1 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+    
+        .create-ticket {
+            width: 100%;
+            overflow: hidden;
+            padding: 10px;
+        }
+    
+        .create-ticket label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+    
+        .create-ticket input[type="text"],
+        .create-ticket textarea,
+        .create-ticket select {
+            padding: 7px 3px;
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            resize: none;
+        }
+    
+        .create-ticket select {
+            appearance: none;
+            background: url("https://cdn3.iconfinder.com/data/icons/faticons/32/arrow-down-01-512.png") no-repeat right center;
+            background-color: white;
+            background-size: 20px;
+            padding-right: 30px;
+        }
+    
+        .create-ticket .category input[type="radio"] {
+            margin-bottom: 10px;
+            margin-right: 10px;
+        }
+    
+        .create-ticket #btn {
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+    
+        .create-ticket #btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <nav class="navbar">
+            <%- include('header') %>
+        </nav>
+        <div class="content">
+            <div class="sidebar">
+                <%- include('dashboard') %>
+            </div>
+            <div class="main">
+                <div class="action-container">
+                    <h1>Create Ticket</h1>
+                    <% if (message) { %>
+                        <p style="color:red; padding-bottom: 20px;"><%= message %></p>
+                    <% } %>
+                    <form class="create-ticket" action="/create-ticket" method="post">
+                        <div class="title">
+                            <label for="title">Title</label>
+                            <input id="title" name="title" placeholder="Enter Title" type="text" required />
+                        </div>
+                        <div class="productId">
+                            <label for="productId">Product Id</label>
+                            <input id="productId" name="productId" placeholder="Enter Product Id" type="text" required />
+                        </div>
+                        <div class="category">
+                            <label for="category">Category</label>
+                            <select id="categorySelector" name="category" required>
+                                <option value="">select</option>
+                                <option value="Technical Issues">Technical Issues</option>
+                                <option value="Help and Support">Help and Support</option>
+                                <option value="Sales Support">Sales Support</option>
+                                <option value="Return">Return</option>
+                                <option value="Replace">Replace</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="discription">
+                            <label for="discription">Discription</label>
+                            <textarea id="discription" rows="8" name="discription" placeholder="Enter Discription"
+                                required></textarea>
+                        </div>
+                        <div class="priority">
+                            <label for="priority">Priority</label>
+                            <select id="prioritySelector" name="priority" required>
+                                <option value="">select</option>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
+                            </select>
+                        </div>
+                        <input type="submit" id="btn" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/script.js"></script>
+</body>
+</html>
